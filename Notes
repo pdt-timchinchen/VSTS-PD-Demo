@@ -1,0 +1,7 @@
+Create the shell project - Use: -
+https://docs.microsoft.com/en-us/vsts/extend/get-started/node
+& 
+https://www.youtube.com/watch?v=guYGlvGcJxA
+
+Run the following: -
+tfx extension create --manifest-globs vss-extension.json

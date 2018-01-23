@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Create Event for PagerDuty</title>
+    <script src="sdk/scripts/VSS.SDK.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">VSS.init();</script>
+    <h1>Create Event for PagerDuty</h1>
+    <script type="text/javascript">VSS.notifyLoadSucceeded();</script>
+
+    <br/>
+    Name: <input type="text" name="developerName" id="dev-name" value="Tim Chinchen"><br/>
+    Service: <input type="text" name="service_key" id="service_key" value="925989251c59464094a68fbce6e76cee"><br/>
+    <button id="PDEventButton" class="PDEventButton" onclick="SendEventToPD()">Send Event</button>
+    <br/>
+
+    <script>
+    function SendEventToPD() {
+
+        var serviceKey = document.getElementById('service_key').value;
+        if (!serviceKey) serviceKey = "925989251c59464094a68fbce6e76cee";
+    
+        node = document.getElementById('dev-name'),
+        developerName = node.value
+    
+        var date = new Date("1/1/2001");  
+        dedupKey = developerName + date.getMinutes()
+        
+        // Requires jQuery
+        var eventObject = '{ ' + 
+        ' "client_url": "https://pdt-tchinchen.visualstudio.com/MyFirstProject/", ' +
+        ' "service_key"\: "' + serviceKey + '", ' +
+        ' "incident_key"\: "' + dedupKey + '", ' +
+        ' "client"\: "VSTS", ' +
+        ' "vendor"\: "VSTS", ' +
+        ' "event_type"\: "trigger", ' +
+        ' "contexts"\: [ ' +
+        ' {  ' +
+            ' "src": "https://s18.postimg.org/3yl0ychi1/NRScreen.png", ' +
+            ' "alt": "Snapshot of metric", ' +
+            ' "href": "https://s18.postimg.org/3yl0ychi1/NRScreen.png", ' +
+            ' "type": "image" ' +
+        ' }, ' +
+    
+        ' { ' +   
+        ' "text": "Conference URL (Zoom)", ' +
+        ' "href": "https://pagerduty.zoom.us/j/5080555253", ' +
+        ' "type": "link" ' +
+        ' }, ' +
+    
+        '{' +
+        '  "text": "Conference Dial (Zoom)",  ' +
+        '  "href": "tel:+442036950088,,5080555253#",  ' +
+        '  "type": "link"  ' +
+        '},' +
+        '{' +
+          ' "text": "Monitor Status", ' +
+          ' "href": "https://pdt-tchinchen.visualstudio.com/MyFirstProject/", ' +
+          ' "type": "link" ' +
+        '},' +
+        '{ ' +
+        ' "text": "Triggered Monitors", ' +
+        '  "href": "https://pdt-tchinchen.visualstudio.com/MyFirstProject/", ' +
+        '  "type": "link" ' +
+        ' } ' +
+        ' ], ' +
+      ' "details": { ' +
+        ' "body": "Latest Build complete - Unit tests failed" , ' +   
+        ' "Order Value": 1000, ' +
+        ' "priority": "High", ' +
+        ' "title": "Latest Build complete - Unit tests failed", ' +
+        ' "event_id": "8125363154448140714", ' +
+        ' "tags": "aws-prod, base, env:prod, host:farnsworth, monitor, pd_az:us-west-2c, production, xdb, xtradb", ' +
+        ' "Customer": "'+ developerName + '" ' +
+        ' }, ' +
+      ' "description": "Latest Build complete - Unit tests failed" ' +
+      '}' 
+
+      console.log(eventObject)
+    
+      $.ajax({
+          method: "POST",
+          url: "https://events.pagerduty.com/generic/2010-04-15/create_event.json",
+          data: eventObject
+        })
+          .done(function( msg ) {
+            //alert( "Data Saved: " + msg );
+        });
+    
+        alert('Event sent to PagerDuty');
+    
+    
+      }
+      </script>
+    
+    
+    
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+
+
+
+
+</body>
+</html>
